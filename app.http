@@ -1,0 +1,11 @@
+GET http://localhost:3001/players/ 
+
+### 
+// API 2 
+
+POST http://localhost:3001/players/ 
+content-type: json 
+
+{
+    playerName:"Ramesh";
+}
