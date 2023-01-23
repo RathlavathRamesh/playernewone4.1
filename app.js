@@ -13,8 +13,8 @@ const initilizeServer = async () => {
       filename: dbPath,
       driver: sqlite3.Database,
     });
-    app.listen(3001, () => {
-      console.log("Server Running At http://localhost:3001/");
+    app.listen(3000, () => {
+      console.log("Server Running At http://localhost:3000/");
     });
   } catch (e) {
     console.log(`Db Error is ${e.message}`);
@@ -32,7 +32,7 @@ const ConvertInCamel = (input) => {
   };
 };
 //GET NAMES API
-app.get("/players", async (request, response) => {
+app.get("/players/", async (request, response) => {
   const quary = ` 
      SELECT * 
      FROM 
@@ -50,9 +50,31 @@ app.get("/players", async (request, response) => {
 
 //ADD Player API
 
-app.post("/players/", (request, response) => {
-  const playerDetails = request.body;
-  console.log(playerDetails);
+app.post("/players/", async (request, response) => {
+  const Details = request.body;
+  const { playerName, jerseyNumber, role } = Details;
+  const addPlayerQuary = ` 
+  INSERT INTO 
+  cricket_team(player_id,player_name,jersey_number,role)
+  VALUES(
+      12, ${playerName},${jerseyNumber},${role}
+  );
+  `;
+  const result = await db.run(addPlayerQuary);
+  console.log("Player Added to Team");
+});
+// GET Player Details
+app.get("/players/:playerId/", async (request, response) => {
+  const { playerId } = request.params;
+  const getPlayerQuary = `
+  SELECT 
+  *
+  FROM 
+  cricket_team 
+  WHERE player_id= 1;
+  `;
+  const result = await db.all(getPlayerQuary);
+  response.send(result);
 });
 
 module.exports = app;
